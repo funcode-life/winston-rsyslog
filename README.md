@@ -1,22 +1,22 @@
-## winston-rsyslog
+## rsyslog-winston
 
 A pure Javascript Rsyslog module with support for RFC3164, RFC5424 based on `syslog-pro`
 
-By default, `winston-rsyslog` is use format `rfc3164`.
+By default, `rsyslog-winston` is use format `rfc3164`.
 
 ### Installation
 
 ```shell
-npm install winston-rsyslog
+npm install rsyslog-winston
 ```
 
 ### Example Usage
 
-Example of using `winston-rsyslog`.
+Example of using `rsyslog-winston`.
 
 ```js
 import winston from 'winston'
-import RSyslog from 'winston-rsyslog'
+import RSyslog from 'rsyslog-winston'
 
 const logger = winston.createLogger({
   level: 'error',

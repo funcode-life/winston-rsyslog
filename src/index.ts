@@ -18,7 +18,7 @@ class RSyslog extends Transport {
     const Syslog = options?.format?.toLowerCase() === 'rfc5424'
       ? RFC5424 : RFC3164
     this.logger = new Syslog({
-      applicationName: options.app,
+      applacationName: options.app,
       server: {
         target: options.host,
         port: options.port
@@ -30,7 +30,12 @@ class RSyslog extends Transport {
     const level = info.level
     if (typeof this.logger[level] !== 'function') throw new Error(`this level ${level} is incorrect`)
     const message = info.message
-    this.logger[level](JSON.stringify(message)).finally(() => callback(null, true))
+    if (typeof message === 'string') {
+      const lines = message.split('\n')
+      lines.forEach(line => this.logger[level](line).finally(() => callback(null, true)))
+    } else {
+      this.logger[level](JSON.stringify(message)).finally(() => callback(null, true))
+    }
   }
 }
 

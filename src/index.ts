@@ -9,15 +9,8 @@ type RSyslogOptions = {
   format?: string
 }
 
-type RSyslogMessage = {
-  level: string,
-  message: string
-}
-
 class RSyslog extends Transport {
   logger: any
-  messages: RSyslogMessage[] = []
-  is_sending: boolean = false
 
   constructor(options: RSyslogOptions) {
     super({})
@@ -33,51 +26,20 @@ class RSyslog extends Transport {
     })
   }
 
-  async serial_sender(): Promise<void> {
-    // 循环中跳出
-    if (this.is_sending) return
-
-    // 循环主体
-    const loop = async (): Promise<void> => {
-      // 空队列重置
-      if (!this.messages.length) {
-        this.is_sending = false
-        return
-      }
-
-      this.is_sending = true
-      const { level, message } = this.messages.shift() as RSyslogMessage
-      try {
-        await this.logger[level](message)
-      } catch (e) {
-        console.error('send rsyslog failed: ', e)
-      }
-      return loop()
-    }
-
-    return loop()
-  }
-
   log(info: any, callback: Function) {
-    const { level, message } = info
+    const level = info.level
     if (typeof this.logger[level] !== 'function') throw new Error(`this level ${level} is incorrect`)
-
+    const message = info.message
     if (typeof message === 'string') {
       const lines = message.split('\n')
-      lines.forEach(line => this.messages.push({
-        level,
-        message: line
-      }))
+      const tasks = lines.reduce(async (acc, line) => {
+        await acc
+        return this.logger[level](line)
+      }, Promise.resolve())
+      tasks.finally(() => callback(null, true))
     } else {
-      this.messages.push({
-        level,
-        message: JSON.stringify(message)
-      })
+      this.logger[level](JSON.stringify(message)).finally(() => callback(null, true))
     }
-
-    this.serial_sender()
-
-    callback(null, true)
   }
 }
 

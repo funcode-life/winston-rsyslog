@@ -1,6 +1,6 @@
 {
   "name": "rsyslog-winston",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "rsyslog transport for winston.",
   "repository": {
     "url": "https://github.com/DYSDF/winston-rsyslog.git"

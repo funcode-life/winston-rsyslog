@@ -32,7 +32,11 @@ class RSyslog extends Transport {
     const message = info.message
     if (typeof message === 'string') {
       const lines = message.split('\n')
-      Promise.all(lines.map(line => this.logger[level](line))).finally(() => callback(null, true))
+      const tasks = lines.reduce(async (acc, line) => {
+        await acc
+        return this.logger[level](line)
+      }, Promise.resolve())
+      tasks.finally(() => callback(null, true))
     } else {
       this.logger[level](JSON.stringify(message)).finally(() => callback(null, true))
     }

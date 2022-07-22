@@ -1,9 +1,8 @@
 import Transport from 'winston-transport'
-// @ts-ignore
 import { RFC3164, RFC5424 } from 'syslog-pro'
 
 type RSyslogOptions = {
-  app?: string,
+  app: string,
   host?: string,
   port?: number,
   format?: string
@@ -13,6 +12,8 @@ class RSyslog extends Transport {
   logger: any
 
   constructor(options: RSyslogOptions) {
+    if (!options.app) throw new Error('option app is required')
+
     super({})
 
     const Syslog = options?.format?.toLowerCase() === 'rfc5424'

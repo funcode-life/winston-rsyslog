@@ -1,6 +1,6 @@
 {
   "name": "rsyslog-winston",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "rsyslog transport for winston.",
   "repository": {
     "url": "https://github.com/DYSDF/winston-rsyslog.git"
@@ -38,6 +38,7 @@
     "builtin-modules": "^3.2.0",
     "chai": "^4.3.4",
     "core-js": "^3.19.2",
+    "logform": "^2.4.2",
     "mocha": "^9.0.1",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",

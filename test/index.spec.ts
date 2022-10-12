@@ -20,7 +20,7 @@ describe('test winston rsyslog', () => {
       app: 'test',
       host: '127.0.0.1',
       port: 456,
-      format: 'rfc5424'
+      rfc: 'RFC5424'
     })
     rsyslog.logger.should.to.be.instanceOf(RFC5424)
   })

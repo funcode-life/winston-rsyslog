@@ -1,6 +1,6 @@
 ## rsyslog-winston
 
-A pure Javascript Rsyslog module with support for RFC3164, RFC5424 based on `syslog-pro`
+A pure Javascript rsyslog module for winston with support for RFC3164, RFC5424 based on `syslog-pro`
 
 By default, `rsyslog-winston` is use format `rfc3164`.
 
@@ -27,4 +27,16 @@ const logger = winston.createLogger({
     })
   ]
 })
+```
+
+### Options
+
+```
+{
+  app: string, // application name
+  host?: string, // rsyslog host
+  port?: number, // rysylog port
+  rfc?: 'RFC5424' | 'RFC3164',
+  format?: Format, // winston log format
+}
 ```

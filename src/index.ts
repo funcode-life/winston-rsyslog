@@ -1,5 +1,6 @@
 import Transport from 'winston-transport'
 import { Format } from 'logform'
+import { MESSAGE, LEVEL } from 'triple-beam'
 import { RFC3164, RFC5424 } from 'syslog-pro'
 
 type RSyslogOptions = {
@@ -32,9 +33,9 @@ class RSyslog extends Transport {
   }
 
   log(info: any, callback: Function) {
-    const level = info.level
+    const level = info[LEVEL]
     if (typeof this.logger[level] !== 'function') throw new Error(`this level ${level} is incorrect`)
-    const message = info.message
+    const message = info[MESSAGE]
     if (typeof message === 'string') {
       const lines = message.split('\n')
       const tasks = lines.reduce(async (acc, line) => {

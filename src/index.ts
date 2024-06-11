@@ -24,7 +24,7 @@ class RSyslog extends Transport {
     const Syslog = options?.rfc === 'RFC5424'
       ? RFC5424 : RFC3164
     this.logger = new Syslog({
-      applacationName: options.app,
+      applicationName: options.app,
       server: {
         target: options.host,
         port: options.port

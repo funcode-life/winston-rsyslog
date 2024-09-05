@@ -1,52 +1,59 @@
-import Transport from 'winston-transport'
-import { Format } from 'logform'
-import { MESSAGE, LEVEL } from 'triple-beam'
-import { RFC3164, RFC5424 } from 'syslog-pro'
+import { Format } from 'logform';
+import { RFC3164, RFC5424 } from 'syslog-pro';
+import { LEVEL, MESSAGE } from 'triple-beam';
+import Transport from 'winston-transport';
 
-type RSyslogOptions = {
-  app: string,
-  host?: string,
-  port?: number,
-  rfc?: 'RFC5424' | 'RFC3164',
-  format?: Format,
+interface RSyslogOptions {
+  app: string;
+  host?: string;
+  port?: number;
+  rfc?: 'RFC5424' | 'RFC3164';
+  format?: Format;
+}
+
+interface LogInfo {
+  level: string;
+  message: string;
 }
 
 class RSyslog extends Transport {
-  logger: any
+  logger: RFC3164 | RFC5424;
 
   constructor(options: RSyslogOptions) {
-    if (!options.app) throw new Error('option app is required')
+    if (!options.app) throw new Error('option app is required');
 
     super({
-      format: options.format
-    })
+      format: options.format,
+    });
 
-    const Syslog = options?.rfc === 'RFC5424'
-      ? RFC5424 : RFC3164
+    const Syslog = options?.rfc === 'RFC5424' ? RFC5424 : RFC3164;
     this.logger = new Syslog({
       applicationName: options.app,
       server: {
         target: options.host,
-        port: options.port
-      }
-    })
+        port: options.port,
+      },
+    });
   }
 
-  log(info: any, callback: Function) {
-    const level = info[LEVEL]
-    if (typeof this.logger[level] !== 'function') throw new Error(`this level ${level} is incorrect`)
-    const message = info[MESSAGE]
+  log(info: LogInfo, callback: (err: Error | null, ok?: boolean) => void) {
+    const level = info[LEVEL];
+    if (typeof this.logger[level] !== 'function')
+      throw new Error(`This level ${level} is incorrect`);
+    const message = info[MESSAGE];
     if (typeof message === 'string') {
-      const lines = message.split('\n')
+      const lines = message.split('\n');
       const tasks = lines.reduce(async (acc, line) => {
-        await acc
-        return this.logger[level](line)
-      }, Promise.resolve())
-      tasks.finally(() => callback(null, true))
+        await acc;
+        return this.logger[level](line);
+      }, Promise.resolve());
+      tasks.finally(() => callback(null, true));
     } else {
-      this.logger[level](JSON.stringify(message)).finally(() => callback(null, true))
+      this.logger[level](JSON.stringify(message)).finally(() =>
+        callback(null, true),
+      );
     }
   }
 }
 
-export default RSyslog
+export default RSyslog;

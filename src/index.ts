@@ -34,7 +34,7 @@ class RSyslog extends Transport {
 
   log(info: any, callback: Function) {
     const level = info[LEVEL]
-    if (typeof this.logger[level] !== 'function') throw new Error(`this level ${level} is incorrect`)
+    if (typeof this.logger[level] !== 'function') throw new Error(`This level ${level} is incorrect`)
     const message = info[MESSAGE]
     if (typeof message === 'string') {
       const lines = message.split('\n')

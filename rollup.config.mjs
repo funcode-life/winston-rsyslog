@@ -3,7 +3,7 @@ import buildins from 'builtin-modules'
 import babel from '@rollup/plugin-babel'
 
 export default {
-  input: path.resolve(__dirname, 'tjs/index.js'),
+  input: path.resolve(import.meta.dirname, 'tjs/index.js'),
   output: {
     entryFileNames: 'index.js',
     preferConst: true,

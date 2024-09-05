@@ -1,5 +1,4 @@
-import chai from 'chai'
-// @ts-ignore
+import * as chai from 'chai'
 import { RFC3164, RFC5424 } from 'syslog-pro'
 import RSyslog from '../src/index'
 

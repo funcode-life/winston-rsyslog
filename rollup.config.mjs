@@ -1,6 +1,6 @@
-import path from 'path'
-import buildins from 'builtin-modules'
-import babel from '@rollup/plugin-babel'
+import babel from '@rollup/plugin-babel';
+import buildins from 'builtin-modules';
+import path from 'path';
 
 export default {
   input: path.resolve(import.meta.dirname, 'tjs/index.js'),
@@ -8,16 +8,12 @@ export default {
     entryFileNames: 'index.js',
     preferConst: true,
     sourcemap: true,
-    exports: 'named'
+    exports: 'named',
   },
-  external: [
-    ...buildins,
-    'winston-transport',
-    'syslog-pro'
-  ],
+  external: [...buildins, 'winston-transport', 'syslog-pro'],
   plugins: [
     babel({
-      babelHelpers: "bundled"
-    })
-  ]
-}
+      babelHelpers: 'bundled',
+    }),
+  ],
+};
